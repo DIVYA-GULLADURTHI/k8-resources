@@ -10,7 +10,7 @@ spec:
   csi:
     driver: ebs.csi.aws.com
     fsType: ext4
-    volumeHandle: vol-072a8f44214a23f64 
+    volumeHandle: vol-0abcd1234ef567890
 --- 
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -45,3 +45,20 @@ spec:
   - name: persistent-storage
     persistentVolumeClaim:
       claimName: ebs-static
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebs-static
+  labels:
+    purpose: ebs-static-demo
+    project: roboshop
+spec:
+  type: LoadBalancer
+  selector:
+    purpose: ebs-static-demo
+    project: roboshop
+  ports:
+    - protocol: TCP
+      port: 80 # service port
+      targetPort: 80 # container port
